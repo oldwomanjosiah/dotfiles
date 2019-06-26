@@ -7,7 +7,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'powerline/powerline'
+Plugin 'vim-AirLine/vim-AirLine'
 
 call vundle#end()
 filetype plugin indent on
