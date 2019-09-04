@@ -12,6 +12,8 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'igrmk/kull-vim'
 Plugin 'theJian/Mogao'
 Plugin 'scrooloose/nerdtree'
+Plugin 'morhetz/gruvbox'
+Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 filetype plugin indent on
@@ -20,9 +22,10 @@ filetype plugin indent on
 syntax enable
 
 set ts=4
-set sw=4
+set sw=0
 set autoindent
 set smartindent
+set expandtab!
 
 set nu
 set rnu
@@ -48,5 +51,7 @@ command! Q :q
 
 " Theme Selection
 let g:airline#extensions#tabline#enabled = 1
-autocmd VimEnter * AirlineTheme raven
-autocmd VimEnter * colorscheme kull
+set signcolumn=yes
+set background=dark
+autocmd VimEnter * AirlineTheme gruvbox
+autocmd VimEnter * colorscheme gruvbox
