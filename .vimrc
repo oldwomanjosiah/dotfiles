@@ -14,6 +14,7 @@ Plugin 'theJian/Mogao'
 Plugin 'scrooloose/nerdtree'
 Plugin 'morhetz/gruvbox'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'tfnico/vim-gradle'
 
 call vundle#end()
 filetype plugin indent on
