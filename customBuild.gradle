@@ -1,0 +1,28 @@
+// This was placed here by josiah's "custom" build script.
+
+plugins {
+  id "com.adarshr.test-logger" version "1.7.0" // Makes running tests actually useful
+}
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse' // Allows a eclipse project to be generated before handing in
+
+mainClassName = 'me.oldwomanjosiah.main'
+
+jar {
+    baseName = rootProject.name
+    version = '2019.0.1'
+    manifest {
+        attributes(
+            'Main-Class': mainClassName
+        )
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}

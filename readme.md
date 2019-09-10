@@ -11,3 +11,7 @@
 - Vundle.vim should be symlinked to either of the following:
 	- `$HOME\vimfiles\plugins`
 	- `$Home\vimfiles\bundle`
+
+### Both
+
+- customBuild.gradle should replace the default build file for most gradle builds, already has the defaults I usually use

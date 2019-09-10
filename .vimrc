@@ -22,20 +22,28 @@ filetype plugin indent on
 " Main Section
 syntax enable
 
+" Indentation
 set ts=4
 set sw=0
 set autoindent
 set smartindent
 set expandtab!
 
+" Numbering
 set nu
 set rnu
+
+" File Finding
 set path+=**
 set wildmenu
 
+" Nerdtree startup and shudown config
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" YouCompleteMe Options
+let g:ycm_autoclose_preview_window_after_completion = 1 " Close preview window when insert mode is left
 
 " Remaps
 nnoremap <C-J> <C-W><C-J> " Move Split Down
@@ -48,11 +56,12 @@ map      <C-n> :NERDTreeToggle<CR> " Toggle Nerd Tree
 set splitbelow
 set splitright
 
+" Remap common mistype
 command! Q :q
 
 " Theme Selection
-let g:airline#extensions#tabline#enabled = 1
-set signcolumn=yes
-set background=dark
-autocmd VimEnter * AirlineTheme gruvbox
+let g:airline#extensions#tabline#enabled = 1 "Show tabline with open buffers
+set signcolumn=yes " Always show gutter for gitgutter, even when empty
+set background=dark " Set gruvmox background default colorsheme
 autocmd VimEnter * colorscheme gruvbox
+autocmd VimEnter * AirlineTheme gruvbox
