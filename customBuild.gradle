@@ -4,12 +4,12 @@ plugins {
   id "com.adarshr.test-logger" version "1.7.0" // Makes running tests actually useful
 }
 apply plugin: 'java'
-apply plugin: 'application'
+apply plugin: 'application' // adds `gradle run` command to run static main in mainClassName
 apply plugin: 'eclipse' // Allows a eclipse project to be generated before handing in
 
-mainClassName = 'me.oldwomanjosiah.main'
+mainClassName = 'me.oldwomanjosiah.Main'
 
-jar {
+jar { // adds `gradle build` target information
     baseName = rootProject.name
     version = '2019.0.1'
     manifest {
@@ -25,4 +25,12 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.12'
+}
+
+test { // Make it so tests always run even when they haven't changed
+    dependsOn 'cleanTest'
+}
+
+run {
+    standardInput = System.in
 }
