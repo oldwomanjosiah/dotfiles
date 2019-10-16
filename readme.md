@@ -3,6 +3,7 @@
 ### Unix
 
 - .vimrc should be symlinked to `~`
+- .zshrc should be symlinked to `~`
 - Vundle.vim should be symlinked to `~/.vim/bundle/`
 
 ### Windows
@@ -11,6 +12,7 @@
 - Vundle.vim should be symlinked to either of the following:
 	- `$HOME\vimfiles\plugins`
 	- `$Home\vimfiles\bundle`
+- You can also use .zshrc on windows if using [WSL](https://docs.microsoft.com/en-us/windows/wsl/faq) and should be symlinked to `~`
 
 ### Both
 
