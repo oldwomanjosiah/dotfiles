@@ -1,5 +1,6 @@
 " Setup
 set nocompatible
+let mapleader = ","
 
 " Vundle
 filetype off
@@ -15,6 +16,8 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'morhetz/gruvbox'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tfnico/vim-gradle'
+Plugin 'wesQ3/vim-windowswap'
+Plugin 'altercation/vim-colors-solarized'
 
 call vundle#end()
 filetype plugin indent on
@@ -27,7 +30,14 @@ set ts=4
 set sw=0
 set autoindent
 set smartindent
-set expandtab!
+set wrap!
+set linebreak
+
+" For markdown and text do wrapping
+autocmd BufRead,BufNewFile *.txt,*.md set wrap linebreak
+
+" Add hbs extension to html highlighting
+autocmd BufRead,BufNewFile *.hbs set syntax=html
 
 " Numbering
 set nu
@@ -43,7 +53,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " YouCompleteMe Options
-let g:ycm_autoclose_preview_window_after_completion = 1 " Close preview window when insert mode is left
+let g:ycm_autoclose_preview_window_after_insertion = 1 " Close preview window when insert mode is left
 
 " Remaps
 nnoremap <C-J> <C-W><C-J> " Move Split Down
