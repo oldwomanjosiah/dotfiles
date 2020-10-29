@@ -3,7 +3,6 @@ let mapleader=" "
 
 call plug#begin('~/.config/nvim/bundles')
 Plug 'morhetz/gruvbox'
-Plug 'airblade/vim-gitgutter'
 
 " Fuzzy Finding (Replacing Nerdtree)
 Plug 'airblade/vim-rooter'
@@ -26,14 +25,17 @@ Plug 'stephpy/vim-yaml'
 Plug 'dag/vim-fish'
 Plug 'rust-lang/rust.vim'
 Plug 'plasticboy/vim-markdown'
+Plug 'ron-rs/ron.vim'
+Plug 'lervag/vimtex'
 
 Plug 'harenome/vim-mipssyntax' " CS315 Mips Syntax
 
 " GUI
 Plug 'itchyny/lightline.vim'
-Plug 'shinchu/lightline-gruvbox.vim'
+Plug 'oldwomanjosiah/lightline-gruvbox.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 " Main Section
@@ -92,8 +94,9 @@ set undodir=~/.config/nvim/.nvimdid
 set undofile
 
 " Fzf Shortcuts
-nnoremap <Leader>; :Buffers<Cr>
+nnoremap <Leader>b :Buffers<Cr>
 nnoremap <C-p> :GFiles<Cr>
+nnoremap <Leader>o :Files<Cr>
 
 " coc options
 nnoremap <Silent> <Leader>f :call CocAction('format')<Cr>
@@ -141,12 +144,23 @@ nnoremap <Leader><Leader> <C-^> " Map space-spcae to go to most recent buffer
 nnoremap <Leader>h :nohlsearch<Cr>
 vnoremap <Leader>h :nohlsearch<Cr>
 
-
 " Lightline Options
+let g:lightline#bufferline#unicode_symbols=1
+let g:lightline_gruvbox_color='both'
+set showtabline=2
+if !has('gui_running')
+  set t_Co=256
+endif
+
 let g:lightline = {
+		\   'colorscheme': 'gruvbox',
 		\   'active': {
 		\     'left': [ [ 'mode', 'paste' ],
-		\               [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+		\				[ 'cocstatus' ],
+		\               [ 'readonly', 'filename', 'modified' ] ],
+		\     'right':[ [ 'gitstatus' ],
+		\				[ 'percent' ],
+		\				[ 'filetype', 'encoding', 'lineinfo' ] ]
 		\   },
 		\   'tabline': {
 		\     'left': [ [ 'buffers' ] ],
@@ -155,6 +169,7 @@ let g:lightline = {
 		\   'component_function': {
 		\     'filename': 'LightlineFilename',
 		\     'cocstatus': 'coc#status',
+		\     'gitstatus': 'LightlineGitStatus',
 		\   },
 		\   'component_expand': {
 		\     'buffers': 'lightline#bufferline#buffers'
@@ -162,12 +177,17 @@ let g:lightline = {
 		\   'component_type': {
 		\     'buffers': 'tabsel'
 		\   },
-		\   'colorscheme': 'gruvbox',
 		\ }
+
 function! LightlineFilename()
-  return expand('%:t') !=# '' ? @% : '[No Name]'
+  return expand('%:t') !=# '' ? WebDevIconsGetFileTypeSymbol() . ' ' . @% : '[No Name]'
+endfunction
+function! LightlineGitStatus() abort
+	let status = get(g:, 'coc_git_status', '')
+	return winwidth(0) > 100 ? status : ''
 endfunction
 
+" Coc
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -179,17 +199,19 @@ endfunction
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+" Show type annotation
+nnoremap <Leader>t :call CocAction('doHover')<Cr>
+nnoremap <Leader>T :call CocAction('doHover')<Cr>
 
 set noshowmode
 
-" tab/bufferline
-let g:lightline#bufferline#unicode_symbols=1
-set showtabline=2
 
 " Start fzf if opened without file specified
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | call fzf#vim#gitfiles(".", 1) | endif
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | call fzf#vim#files(".", 1) | endif
 
+" Vimtex filetype options
+let g:tex_flavor = 'latex'
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
