@@ -1,13 +1,19 @@
 set nocompatible
 let mapleader=" "
 
+" {{{ Plugins
 call plug#begin('~/.config/nvim/bundles')
 Plug 'morhetz/gruvbox'
 
 " Fuzzy Finding (Replacing Nerdtree)
-Plug 'airblade/vim-rooter'
+" Plug 'airblade/vim-rooter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+Plug 'preservim/nerdtree' |
+ \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+ \ Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Language Client for RLS
 Plug 'autozimu/LanguageClient-neovim', {
@@ -15,6 +21,8 @@ Plug 'autozimu/LanguageClient-neovim', {
 		\ 'do': 'bash install.sh',
 		\ }
 
+" Tags Pane
+Plug 'liuchengxu/vista.vim'
 
 " AutoCompletion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -24,11 +32,11 @@ Plug 'cespare/vim-toml'
 Plug 'stephpy/vim-yaml'
 Plug 'dag/vim-fish'
 Plug 'rust-lang/rust.vim'
-Plug 'plasticboy/vim-markdown'
+" Plug 'plasticboy/vim-markdown'
 Plug 'ron-rs/ron.vim'
 Plug 'lervag/vimtex'
 
-Plug 'harenome/vim-mipssyntax' " CS315 Mips Syntax
+" Plug 'harenome/vim-mipssyntax' " CS315 Mips Syntax
 
 " GUI
 Plug 'itchyny/lightline.vim'
@@ -38,11 +46,13 @@ Plug 'mengelbrecht/lightline-bufferline'
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
+" }}}
+
 " Main Section
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-set noexpandtab
+" set noexpandtab
 set nu
 set rnu
 set signcolumn=yes " For empty gitgutter
@@ -63,6 +73,9 @@ map L $
 " Center Search Results
 nnoremap <silent> n nzz
 nnoremap <silent> N Nzz
+
+" Allow Mouse Scrolling in terminals
+set mouse=a
 
 " File Finding
 set path+=**
@@ -97,6 +110,30 @@ set undofile
 nnoremap <Leader>b :Buffers<Cr>
 nnoremap <C-p> :GFiles<Cr>
 nnoremap <Leader>o :Files<Cr>
+nnoremap <Leader>f :Rg<Cr>
+
+" Nerdtree
+nnoremap <Leader>nt :NERDTreeToggle<Cr>
+nnoremap <Leader>nn :NERDTreeFocus<Cr>
+
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
+" Start nerdtree if vim started without a file
+autocmd VimEnter * NERDTree | wincmd p
+
+" NERDTreeGit
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusShowIgnored = 1
+
+" Tex reflow paragraph
+nnoremap <Leader>rf :norm gqip<Cr>
+vnoremap <Leader>rf gq<Cr>
 
 " coc options
 nnoremap <Silent> <Leader>f :call CocAction('format')<Cr>
@@ -112,6 +149,13 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+"
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
 
 " 'Smart' nevigation
 " Use tab for trigger completion with characters ahead and navigate.
@@ -198,20 +242,52 @@ function! s:show_documentation()
 endfunction
 
 " Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 " Show type annotation
 nnoremap <Leader>t :call CocAction('doHover')<Cr>
 nnoremap <Leader>T :call CocAction('doHover')<Cr>
 
+nnoremap <silent> <Leader>a :CocAction<Cr>
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Apply AutoFix to problem on the current line.
+nmap <leader>i  <Plug>(coc-fix-current)
+
+" Coc code regions
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
 set noshowmode
 
+" Vista Options
+let g:vista_default_executive = 'coc'
+let g:vista#renderer#enable_icon = 1
+let g:vista_fzf_preview = ['right:50%']
+let g:vista_echo_cursor_strategy = 'scroll'
+
+nnoremap <silent> <Leader>vf :Vista finder<Cr>
+nnoremap <silent> <Leader>vv :Vista!!<Cr>
 
 " Start fzf if opened without file specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | call fzf#vim#files(".", 1) | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | call fzf#vim#files(".", 0) | endif
+
+" Rust specific options
+autocmd BufNewFile,BufRead *.rs setlocal colorcolumn=100
 
 " Vimtex filetype options
 let g:tex_flavor = 'latex'
+autocmd BufNewFile,BufRead *.tex setlocal textwidth=80 spell spelllang=en_us
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -223,6 +299,9 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 set cmdheight=2
 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=300
+
+" Foldmethod
+set foldmethod=marker
 
 " Set Colorscheme
 colorscheme gruvbox
