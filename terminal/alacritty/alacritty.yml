@@ -1,34 +1,34 @@
 # Agave (https://github.com/blobject/agave)
-font:
-    size: 14
-    normal:
-        family: Agave Nerd Font
-        style: r
-    bold:
-        family: Agave
-        style: Bold
-    italic:
-        family: Agave
-        style: Bold
-    offset:
-        x: 0
-        y: 0
-
-# CodeNewRoman ()
 # font:
-#     size: 14
+#     size: 10
 #     normal:
-#         family: CodeNewRoman Nerd Font
-#         style: Book
+#         family: agave Nerd Font Complete Mono
+#         style: r
 #     bold:
-#         family: CodeNewRoman Nerd Font
+#         family: Agave
 #         style: Bold
 #     italic:
-#         family: CodeNewRoman Nerd Font
-#         style: Italic
+#         family: Agave
+#         style: Bold
 #     offset:
-#         x: 1
-#         y: 1
+#         x: 0
+#         y: 0
+
+# CodeNewRoman ()
+font:
+    size: 11
+    normal:
+        family: CodeNewRoman Nerd Font Mono
+        style: Book
+    bold:
+        family: CodeNewRoman Nerd Font Mono
+        style: Bold
+    italic:
+        family: CodeNewRoman Nerd Font Mono
+        style: Italic
+    offset:
+        x: 1
+        y: 1
 
 # Colors (Gruvbox dark)
 colors:
