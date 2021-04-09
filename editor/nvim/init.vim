@@ -98,6 +98,9 @@ nnoremap <Right> <NoP>
 nnoremap :W :w
 nnoremap :Q :q
 
+" Better redo
+nnoremap U <C-r>
+
 " Change split behavior to match tmux
 set splitright
 set splitbelow
